@@ -95,7 +95,7 @@ class GASolver:
 
 
 
-
+#aaaa
 
 solver =GASolver()
 solver.reset_population()

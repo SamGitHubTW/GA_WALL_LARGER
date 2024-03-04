@@ -65,16 +65,29 @@ class GASolver:
                 mutation_rate i.e., mutate it if a random value is below   
                 mutation_rate
         """
+        self._initial_population= self._population
         self._population.sort(reverse=True)
         num_to_keep= int(len(self._population)*self._selection_rate)
         self._population=self._population[:num_to_keep]
-        print(self._population)
+       # print(self._population)
         
         while len(self._population) < len(self._initial_population):
             import random
             parent1, parent2 = random.sample(self._population, 2)
-            x_point = random.randint(1, min(len(parent1.chromosome), len(parent2.chromosome)) - 1)
+            x_point = random.randrange(0, min(len(parent1.chromosome), len(parent2.chromosome)))
             new_chromosome = parent1.chromosome[:x_point] + parent2.chromosome[x_point:]
+
+            if random.random() < self._mutation_rate:
+                pos = random.randrange(0, len(new_chromosome))
+                valid_colors = mm.get_possible_colors()
+                new_gene = random.choice(valid_colors)
+                new_chromosome[pos] = new_gene
+            
+            new_individual = Individual(new_chromosome, MATCH.rate_guess(new_chromosome))
+            self._population.append(new_individual)
+        
+        #print(self._population)
+
 
 
     def show_generation_summary(self):
@@ -83,15 +96,25 @@ class GASolver:
 
     def get_best_individual(self):
         """ Return the best Individual of the population """
-        pass  # REPLACE WITH YOUR CODE
+        
 
-    def evolve_until(self, max_nb_of_generations=500, threshold_fitness=None):
+    def evolve_until(self, max_nb_of_generations=500, threshold_fitness=5):
         """ Launch the evolve_for_one_generation function until one of the two condition is achieved : 
             - Max nb of generation is achieved
             - The fitness of the best Individual is greater than or equal to
               threshold_fitness
         """
-        pass  # REPLACE WITH YOUR CODE
+        self._population.sort(reverse=True)
+        count =0
+        
+        while(count<max_nb_of_generations and self._population[0].fitness<threshold_fitness):
+            solver.evolve_for_one_generation()
+            count=count+1
+            print(count)
+
+        print(count)
+        print(self._population[0])
+         # REPLACE WITH YOUR CODE
 
 
 
@@ -100,4 +123,4 @@ class GASolver:
 solver =GASolver()
 solver.reset_population()
 solver.evolve_for_one_generation()
-    
+solver.evolve_until()

@@ -13,7 +13,7 @@ Initialize the Solver:
 
 Reset the Population:
 
--Use the reset_population method of the solver to initialize the population of individuals.
+- Use the reset_population method of the solver to initialize the population of individuals.
 
 Evolve the Population:
 

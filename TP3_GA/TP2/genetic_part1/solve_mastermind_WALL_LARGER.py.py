@@ -96,9 +96,10 @@ class GASolver:
 
     def get_best_individual(self):
         """ Return the best Individual of the population """
-        
+        print(self._population[0])  
+        return self._population[0]      
 
-    def evolve_until(self, max_nb_of_generations=500, threshold_fitness=5):
+    def evolve_until(self, max_nb_of_generations=500, threshold_fitness=25):
         """ Launch the evolve_for_one_generation function until one of the two condition is achieved : 
             - Max nb of generation is achieved
             - The fitness of the best Individual is greater than or equal to
@@ -110,11 +111,9 @@ class GASolver:
         while(count<max_nb_of_generations and self._population[0].fitness<threshold_fitness):
             solver.evolve_for_one_generation()
             count=count+1
-            print(count)
-
-        print(count)
-        print(self._population[0])
-         # REPLACE WITH YOUR CODE
+            #print(count)
+        self._population.sort(reverse=True)
+       
 
 
 
@@ -123,4 +122,7 @@ class GASolver:
 solver =GASolver()
 solver.reset_population()
 solver.evolve_for_one_generation()
-solver.evolve_until()
+solver.evolve_until(threshold_fitness=MATCH.max_score())
+best = solver.get_best_individual()
+print(f"Best guess {best.chromosome}")
+print(f"Problem solved? {MATCH.is_correct(best.chromosome)}")
